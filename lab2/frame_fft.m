@@ -20,7 +20,7 @@ if nargin < 2 || isempty(start_idx)
 end
 
 if nargin < 3 || isempty(frame_size)
-    frame_size = 255;
+    frame_size = 256;
 end
 
 

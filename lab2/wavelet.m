@@ -19,7 +19,6 @@ if nargin < 2 || isempty(frame_size)
     frame_size = 256;
 end
 
-
 if nargin < 3 || isempty(scale_sel)
     scale_sel = 0;      
 end
@@ -27,11 +26,11 @@ end
 sample = x;
 
 % Construct window function
-L = frame_size
-w = hamming(L)
+L = frame_size;
+w = hamming(L);
 
 frame_num = floor(size(sample, 1)/L*2);
-spectrogram = zeros(frame_num,L)
+spectrogram = zeros(frame_num,L);
 
 for i = 1:frame_num-1
     offset = (i-1)*L/2;
