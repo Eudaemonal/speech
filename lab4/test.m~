@@ -4,13 +4,7 @@
 [inp_aud,fs] = audioread('../Speech samples/sample1.wav');
 
 
-%{
-frame_size = 256;
-frame_start = 1200;
-range = [frame_start,frame_start + frame_size];
 
-frame = sample(range(1), range(2));
-%}
 
 
 t=length(inp_aud)/fs; %%% signal duration
@@ -53,14 +47,14 @@ n=frm_len-1;
 frm_num = floor((length(inp_aud)-frm_len)/frm_len)+1;
 format_contour = zeros(frm_num, fs);
  
-count = 0;
-for frm=1:frm_len:(length(inp_aud)-frm_len)
-    count = count+1;
+
+frm=1200
+
     y=inp_aud(frm:frm+n);    
     coef_init=zeros(p+1);
     autocor=xcorr(y);
     R=autocor(((length(autocor)+1)./2):length(autocor));
-    
+
     ep(1)=R(1);          
     for j=2:p+1
         tot=0;               
@@ -78,6 +72,7 @@ for frm=1:frm_len:(length(inp_aud)-frm_len)
     end
 
     q=coef_init((1:j),j)';
+    
     %----------------------------------------------------------------------
     contour = abs(ifft(q,fs));
     contour = circshift(contour,fs/2);
@@ -101,9 +96,9 @@ for frm=1:frm_len:(length(inp_aud)-frm_len)
         gain(frm)=sqrt(pitch_per(frm).*sum(e(1:denom).^2)/denom);
     end
 
-end
+%}
 
-%%% encoding ends...
+%{
 
 %decoding::
 for frm=1:frm_len:(length(gain))
@@ -168,4 +163,5 @@ plot3(X,Y,Z,'r')
 plot3(X,Y,Z,'r')
 hold on 
 stft(inp_aud,fs,320)
+%}
 %}

@@ -24,7 +24,7 @@ fprintf('Filter order: %d\n',p);
 
 %%encoding:::
 
-fr=0.01;    %frame size=30ms
+fr=0.03;    %frame size=30ms
 fprintf('Frame size= %d ms\n',fr*1000);
 frm_len=fs*fr; %no of samples in a frame
 n=frm_len-1;
@@ -50,8 +50,8 @@ n=frm_len-1;
  
  %Coefficients and gain::(levinson-durbin method)
  
-frm_num = floor((length(inp_aud)-frm_len)/frm_len)+1;
-format_contour = zeros(frm_num, fs);
+ frm_num = floor((length(inp_aud)-frm_len)/frm_len);
+ F(frm_num) = struct([],[]);
  
 count = 0;
 for frm=1:frm_len:(length(inp_aud)-frm_len)
@@ -78,15 +78,13 @@ for frm=1:frm_len:(length(inp_aud)-frm_len)
     end
 
     q=coef_init((1:j),j)';
-    %----------------------------------------------------------------------
-    contour = abs(ifft(q,fs));
-    contour = circshift(contour,fs/2);
-    plot(contour)
+    %-----------------------
+    plot(abs(ifft(q)))
     drawnow
     F(count) = getframe(gcf);
     
-    format_contour(count,:)= contour;
-    %----------------------------------------------------------------------
+    
+    
     num_co=length(q);
     y_estm=filter([0 -q(2:end)],1,y);    
     e=y-y_estm;  %% errors
@@ -145,27 +143,3 @@ plot(dec_aud);
 title('LPC-decoded Audio Signal');
 
 
-% Replay 
-%{
-fig = figure;
-movie(fig,F,1,1)
-%}
-
-count = 1;
-for i = 1:frm_num
-    for j = 1:fs
-        X(count) = j;
-        Y(count) = i;
-        Z(count) = format_contour(i,j)*70000;
-        count = count + 1;
-    end
-end
-figure
-plot3(X,Y,Z,'r')
-
-
-%{
-plot3(X,Y,Z,'r')
-hold on 
-stft(inp_aud,fs,320)
-%}

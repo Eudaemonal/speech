@@ -41,7 +41,7 @@ for i = 1:frame_num-1
 end
 
     if nargout==0
-        surf(spectrogram);
+        mesh(spectrogram);
 
     else
         varargout = {spectrogram};

@@ -4,27 +4,21 @@
 [inp_aud,fs] = audioread('../Speech samples/sample1.wav');
 
 
-%{
-frame_size = 256;
-frame_start = 1200;
-range = [frame_start,frame_start + frame_size];
 
-frame = sample(range(1), range(2));
-%}
 
 
 t=length(inp_aud)/fs; %%% signal duration
 fprintf('Signal duration= %f secs\n',t);
 fprintf('Sampling frequency= %d Hz\n',fs);
 
-p=10;  %filter order
+p=64;  %filter order
 fprintf('Filter order: %d\n',p);
 % play_snd=@soundsc;
 
 
 %%encoding:::
 
-fr=0.01;    %frame size=30ms
+fr=0.005;    %frame size=30ms
 fprintf('Frame size= %d ms\n',fr*1000);
 frm_len=fs*fr; %no of samples in a frame
 n=frm_len-1;
@@ -53,14 +47,14 @@ n=frm_len-1;
 frm_num = floor((length(inp_aud)-frm_len)/frm_len)+1;
 format_contour = zeros(frm_num, fs);
  
-count = 0;
-for frm=1:frm_len:(length(inp_aud)-frm_len)
-    count = count+1;
+
+frm=1300;
+
     y=inp_aud(frm:frm+n);    
     coef_init=zeros(p+1);
     autocor=xcorr(y);
     R=autocor(((length(autocor)+1)./2):length(autocor));
-    
+
     ep(1)=R(1);          
     for j=2:p+1
         tot=0;               
@@ -72,21 +66,17 @@ for frm=1:frm_len:(length(inp_aud)-frm_len)
 
         coef_init(j,j)= -T(j);
         coef_init(1,j)=1;
+        
+        
         for i=2:(j-1)
             coef_init(i,j)=coef_init(i,(j-1))-T(j).*coef_init((j-i+1),(j-1));
         end
     end
 
     q=coef_init((1:j),j)';
-    %----------------------------------------------------------------------
-    contour = abs(ifft(q,fs));
-    contour = circshift(contour,fs/2);
-    plot(contour)
-    drawnow
-    F(count) = getframe(gcf);
     
-    format_contour(count,:)= contour;
-    %----------------------------------------------------------------------
+ 
+
     num_co=length(q);
     y_estm=filter([0 -q(2:end)],1,y);    
     e=y-y_estm;  %% errors
@@ -101,12 +91,9 @@ for frm=1:frm_len:(length(inp_aud)-frm_len)
         gain(frm)=sqrt(pitch_per(frm).*sum(e(1:denom).^2)/denom);
     end
 
-end
 
-%%% encoding ends...
 
-%decoding::
-for frm=1:frm_len:(length(gain))
+
     if(v_uv(frm)==1) %voiced 
             for h=1:frm_len
                 if(h/pitch_per(frm)==floor(h/pitch_per(frm)))
@@ -123,7 +110,7 @@ for frm=1:frm_len:(length(gain))
     end
     
     dec_aud(frm:frm+frm_len-1)=w;
-end
+
     
 %decoding ends....   
     
@@ -151,21 +138,20 @@ fig = figure;
 movie(fig,F,1,1)
 %}
 
-count = 1;
-for i = 1:frm_num
-    for j = 1:fs
-        X(count) = j;
-        Y(count) = i;
-        Z(count) = format_contour(i,j)*70000;
-        count = count + 1;
-    end
-end
+
+
+
+
+    
+    
+    
+    
 figure
-plot3(X,Y,Z,'r')
+plot(y)
+hold on
+plot(w)
 
 
-%{
-plot3(X,Y,Z,'r')
-hold on 
-stft(inp_aud,fs,320)
+    
+    
 %}
