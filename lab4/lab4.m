@@ -79,13 +79,13 @@ for frm=1:frm_len:(length(inp_aud)-frm_len)
 
     q=coef_init((1:j),j)';
     %----------------------------------------------------------------------
-    contour = abs(ifft(q,fs));
-    contour = circshift(contour,fs/2);
-    plot(contour)
+    [h,w] = freqz(1,q,fs/2);
+    h = abs(h);
+    plot(h);
     drawnow
     F(count) = getframe(gcf);
-    
-    format_contour(count,:)= contour;
+    h_f = flipud(h);
+    format_contour(count,:)= [h', h_f'];
     %----------------------------------------------------------------------
     num_co=length(q);
     y_estm=filter([0 -q(2:end)],1,y);    
@@ -156,7 +156,7 @@ for i = 1:frm_num
     for j = 1:fs
         X(count) = j;
         Y(count) = i;
-        Z(count) = format_contour(i,j)*70000;
+        Z(count) = format_contour(i,j);
         count = count + 1;
     end
 end
@@ -164,8 +164,8 @@ figure
 plot3(X,Y,Z,'r')
 
 
-%{
+
 plot3(X,Y,Z,'r')
 hold on 
 stft(inp_aud,fs,320)
-%}
+

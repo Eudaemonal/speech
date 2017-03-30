@@ -48,7 +48,7 @@ frm_num = floor((length(inp_aud)-frm_len)/frm_len)+1;
 format_contour = zeros(frm_num, fs);
  
 
-frm=1300;
+frm=1800;
 
     y=inp_aud(frm:frm+n);    
     coef_init=zeros(p+1);
@@ -144,12 +144,14 @@ movie(fig,F,1,1)
 
     
     
-    
-    
+
+[h,w] = freqz(1,q,60)
+h = abs(h)
+hi = interp1(1:10,h,1:0.00125:10); 
 figure
-plot(y)
+plot(abs(fft(y,16000)))
 hold on
-plot(w)
+plot(abs(hi))
 
 
     
