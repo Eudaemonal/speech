@@ -26,11 +26,11 @@ for i = 1:frame_num-1
     
     frame = x0(1+offset:offset+frame_size);
     
-    y = acf(frame,128);
-    [loc, mag] = peakfinder(y,(max(y)-min(y))/4,0.6);
+    y = acf(frame,frame_size/2);
+    [loc, mag] = peakfinder(y,(max(y)-min(y))/320,0);
     
     if size(loc,1) >= 2
-        pitch_contour(i) = fs/(loc(2) - loc(1));
+        pitch_contour(i) = fs/(loc(end) - loc(1));
     else
         pitch_contour(i) = 0;
     end

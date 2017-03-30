@@ -11,14 +11,14 @@ t=length(inp_aud)/fs; %%% signal duration
 fprintf('Signal duration= %f secs\n',t);
 fprintf('Sampling frequency= %d Hz\n',fs);
 
-p=64;  %filter order
+p=10;  %filter order
 fprintf('Filter order: %d\n',p);
 % play_snd=@soundsc;
 
 
 %%encoding:::
 
-fr=0.005;    %frame size=30ms
+fr=0.03;    %frame size=30ms
 fprintf('Frame size= %d ms\n',fr*1000);
 frm_len=fs*fr; %no of samples in a frame
 n=frm_len-1;
@@ -145,9 +145,9 @@ movie(fig,F,1,1)
     
     
 
-[h,w] = freqz(1,q,60)
+[h,w] = freqz(1,q,8000)
 h = abs(h)
-hi = interp1(1:10,h,1:0.00125:10); 
+hi = h
 figure
 plot(abs(fft(y,16000)))
 hold on

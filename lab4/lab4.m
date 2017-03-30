@@ -1,16 +1,9 @@
 % EE9723 Lab 4
 
 
-[inp_aud,fs] = audioread('../Speech samples/sample1.wav');
+[inp_aud,fs] = audioread('../Speech samples/sample2.wav');
 
 
-%{
-frame_size = 256;
-frame_start = 1200;
-range = [frame_start,frame_start + frame_size];
-
-frame = sample(range(1), range(2));
-%}
 
 
 t=length(inp_aud)/fs; %%% signal duration
@@ -166,6 +159,6 @@ plot3(X,Y,Z,'r')
 
 
 plot3(X,Y,Z,'r')
-hold on 
+hold on
 stft(inp_aud,fs,320)
 
