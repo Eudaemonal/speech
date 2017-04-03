@@ -1,28 +1,29 @@
 % EE9723 Lab 4
-clear all
-clc
 
 
 [inp_aud,fs] = audioread('../Speech samples/sample1.wav');
 
-t=length(inp_aud)/fs; % signal duration
+
+
+
+t=length(inp_aud)/fs; %%% signal duration
 fprintf('Signal duration= %f secs\n',t);
 fprintf('Sampling frequency= %d Hz\n',fs);
 
-p=20;  %filter order
+p=10;  %filter order
 fprintf('Filter order: %d\n',p);
 % play_snd=@soundsc;
 
 
-% encoding:::
+%%encoding:::
 
-fr=0.03;    %frame size=30ms
+fr=0.01;    %frame size=30ms
 fprintf('Frame size= %d ms\n',fr*1000);
-frm_len=fs*fr; % no of samples in a frame
+frm_len=fs*fr; %no of samples in a frame
 n=frm_len-1;
 
 
-
+ 
 % voiced/unvoiced & pitch
  for frm=1:frm_len:(length(inp_aud)-frm_len)
     y=inp_aud(frm:frm+n);
@@ -45,14 +46,14 @@ n=frm_len-1;
 frm_num = floor((length(inp_aud)-frm_len)/frm_len)+1;
 format_contour = zeros(frm_num, fs);
  
-
-frm=2000;
-
-y=inp_aud(frm:frm+n);    
-coef_init=zeros(p+1);
-autocor=xcorr(y);
-R=autocor(((length(autocor)+1)./2):length(autocor));
-
+count = 0;
+for frm=1:frm_len:(length(inp_aud)-frm_len)
+    count = count+1;
+    y=inp_aud(frm:frm+n);    
+    coef_init=zeros(p+1);
+    autocor=xcorr(y);
+    R=autocor(((length(autocor)+1)./2):length(autocor));
+    
     ep(1)=R(1);          
     for j=2:p+1
         tot=0;               
@@ -64,17 +65,21 @@ R=autocor(((length(autocor)+1)./2):length(autocor));
 
         coef_init(j,j)= -T(j);
         coef_init(1,j)=1;
-        
-        
         for i=2:(j-1)
             coef_init(i,j)=coef_init(i,(j-1))-T(j).*coef_init((j-i+1),(j-1));
         end
     end
 
     q=coef_init((1:j),j)';
-    
- 
-
+    %----------------------------------------------------------------------
+    [h,w] = freqz(1,q,fs/2);
+    h = abs(h);
+    plot(h);
+    drawnow
+    F(count) = getframe(gcf);
+    h_f = flipud(h);
+    format_contour(count,:)= [h', h_f'];
+    %----------------------------------------------------------------------
     num_co=length(q);
     y_estm=filter([0 -q(2:end)],1,y);    
     e=y-y_estm;  %% errors
@@ -89,9 +94,12 @@ R=autocor(((length(autocor)+1)./2):length(autocor));
         gain(frm)=sqrt(pitch_per(frm).*sum(e(1:denom).^2)/denom);
     end
 
+end
 
+%%% encoding ends...
 
-
+%decoding::
+for frm=1:frm_len:(length(gain))
     if(v_uv(frm)==1) %voiced 
             for h=1:frm_len
                 if(h/pitch_per(frm)==floor(h/pitch_per(frm)))
@@ -108,7 +116,7 @@ R=autocor(((length(autocor)+1)./2):length(autocor));
     end
     
     dec_aud(frm:frm+frm_len-1)=w;
-
+end
     
 %decoding ends....   
     
@@ -136,15 +144,21 @@ fig = figure;
 movie(fig,F,1,1)
 %}
 
-[h,w] = freqz(1,q,fs/2)
-h = abs(h)
-hi = h
+count = 1;
+for i = 1:frm_num
+    for j = 1:fs
+        X(count) = j;
+        Y(count) = i;
+        Z(count) = format_contour(i,j);
+        count = count + 1;
+    end
+end
 figure
-plot(abs(fft(y,fs)))
+plot3(X,Y,Z,'r')
+
+
+
+plot3(X,Y,Z,'r')
 hold on
-plot(abs(hi))
+stft(inp_aud,fs,320)
 
-
-    
-    
-%}

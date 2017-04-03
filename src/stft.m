@@ -36,7 +36,11 @@ spectrogram = zeros(frame_num,fs);
 
 for i = 1:frame_num-1
     offset = (i-1)*L/2;
+    if scale_sel ==0 % normal scale
     spectrogram(i,:) = abs(fft(sample(1+offset:offset+L).*w, fs));
+    else  % log scale
+    spectrogram(i,:) = 10*log(abs(fft(sample(1+offset:offset+L).*w, fs)));
+    end
 
 end
 
