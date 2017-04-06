@@ -2,10 +2,10 @@
 clear all
 close all
 
-[sample,fs] = audioread('../Speech samples/sample1.wav');
+[sample,fs] = audioread('../Speech samples/sample4.wav');
 
 % frame_fft(sample, 1600,256)
-frame_size = 300;
+frame_size = 512;
 
 contour = pitch_contour( sample, fs, frame_size,4,0.2 );
 

@@ -1,0 +1,31 @@
+function varargout = voiced_unvoiced_frame(x0, fs,frm_len )
+% voiced/unvoiced & pitch
+%{
+INPUTS:
+        x0 - Speech signal samples
+        fs - Sampling frequency (Hz)
+        frm_len - frame length
+
+ONPUTS:
+        v_uv    - 1 if voiced, 0 if unvoiced
+%}
+
+frm_num = floor(size(x0,1)/frm_len);
+
+for cnt = 1:frm_num
+    start_idx = (cnt-1)*frm_len + 1;
+    end_idx = cnt*frm_len;
+    frm = x0(start_idx: end_idx);
+
+    
+    
+    v_uv(start_idx: end_idx) = voiced_unvoiced_frame(frm, fs);
+
+	v_uv(1:frm_len)=0;
+end
+
+ 
+ varargout = {v_uv};
+ 
+ 
+end
