@@ -46,9 +46,14 @@ end
 
     if nargout==0
         mesh(spectrogram);
-
+        xlabel('Frequency (Hz)')
+        ylabel('Frame Number')
+        zlabel('Magnitude')
+        %axis xy; axis tight; colormap(jet);
+        %view(0,90);
     else
         varargout = {spectrogram};
+
     end
 
 end
