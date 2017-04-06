@@ -1,11 +1,11 @@
-function varargout = formant_contour(x0, fs, frm_len)
+function varargout = formant_contour(x0, fs, frm_len, sel)
 %formant_CONTOUR Summary of this function goes here
 %{
 INPUTS:
         x0    - Speech signal samples
         fs    - Sampling frequency (Hz)
         frm_len - Window length (default: 256)
-
+        sel
 ONPUTS:
         varargout - pitch contour
 %}
@@ -13,13 +13,15 @@ ONPUTS:
 % default filter order: 32
 p=32;  %filter order
 
-narginchk(2, 3);
+narginchk(2, 4);
 nargoutchk(0, 1);
 
 if nargin < 3 || isempty(frm_len)
     frm_len = 256;
 end
-
+if nargin < 4 || isempty(sel)
+    frm_len = 0;
+end
 
 
  %Coefficients and gain::(levinson-durbin method)
@@ -95,6 +97,7 @@ end
 
 
 if nargout == 0
+    if sel == 0
     map = stft(x0, fs, frm_len, 0);
     mesh(map)
     axis xy; axis tight; colormap(jet); view(0,90);
@@ -104,6 +107,16 @@ if nargout == 0
     plot3(formant_contour(:,2),1:size(formant_contour, 1),z,'yo','LineWidth',3)
     plot3(formant_contour(:,3),1:size(formant_contour, 1),z,'go','LineWidth',3)
     legend('','1st Formant','2nd Formant','3rd Formant')
+    else
+    mesh(formant_model)
+    axis xy; axis tight; colormap(jet); view(0,90);
+    hold on
+    z = repmat(64,1,size(formant_contour, 1));
+    plot3(formant_contour(:,1),1:size(formant_contour, 1),z,'ro','LineWidth',3)
+    plot3(formant_contour(:,2),1:size(formant_contour, 1),z,'yo','LineWidth',3)
+    plot3(formant_contour(:,3),1:size(formant_contour, 1),z,'go','LineWidth',3)
+    legend('','1st Formant','2nd Formant','3rd Formant')       
+    end
 else
     
 end

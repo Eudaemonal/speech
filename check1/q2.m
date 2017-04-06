@@ -38,7 +38,7 @@ plot3(contour2,1:size(contour2, 2),z,'ro','LineWidth',3)
 
 % ------------------------- test_sample3-----------------------------------
 figure
-contour3 = pitch_contour( sample3, fs3, frame_size,4,0.4 );
+contour3 = pitch_contour( sample3, fs3, frame_size,16,0.2 );
 % Plot stft spectrogram
 map3 = stft(sample3, fs3, frame_size, 0);
 mesh(map3)
