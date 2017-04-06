@@ -2,7 +2,7 @@
 clear all
 close all
 
-[sample,fs] = audioread('../Speech samples/sample4.wav');
+[sample,fs] = audioread('../Speech samples/sample1.wav');
 
 % frame_fft(sample, 1600,256)
 frame_size = 300;
