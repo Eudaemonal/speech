@@ -7,6 +7,9 @@ close all
 
 frame_size = 256;
 
+mode = 1;
+switch(mode)
+    case 1
 % ------------------------- test_sample1-----------------------------------
 contour1 = pitch_contour( sample1, fs1, frame_size,4,0.4 );
 % Plot stft spectrogram
@@ -20,7 +23,7 @@ hold on
 % Overlay pitch contour
 z = repmat(35,1,size(contour1, 2));
 plot3(contour1,1:size(contour1, 2),z,'ro','LineWidth',3)
-
+    case 2
 % ------------------------- test_sample2-----------------------------------
 figure
 contour2 = pitch_contour( sample2, fs2, frame_size,4,0.4 );
@@ -36,6 +39,7 @@ hold on
 z = repmat(35,1,size(contour2, 2));
 plot3(contour2,1:size(contour2, 2),z,'ro','LineWidth',3)
 
+    case 3
 % ------------------------- test_sample3-----------------------------------
 figure
 contour3 = pitch_contour( sample3, fs3, frame_size,16,0.2 );
@@ -50,3 +54,6 @@ hold on
 % Overlay pitch contour
 z = repmat(35,1,size(contour3, 2));
 plot3(contour3,1:size(contour3, 2),z,'ro','LineWidth',3)
+
+
+end

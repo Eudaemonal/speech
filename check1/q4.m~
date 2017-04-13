@@ -1,7 +1,0 @@
-clear all
-close all
-
-[sample,fs] = audioread('../Test Files/test_utterance.wav');
-
-
-

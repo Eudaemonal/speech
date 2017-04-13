@@ -75,7 +75,7 @@ formant_contour = zeros(size(formant_model, 1), 3);
 
 for i=1:size(formant_model, 1)
     spec = formant_model(i,:);
-    [loc, mag] = peakfinder(spec,(max(spec)-min(spec))/24,-3);
+    [loc, mag] = peakfinder(spec,(max(spec)-min(spec))/16,1);
 
     if size(loc,2)>=3 
         if(formant_range_check(loc(1),1) && formant_range_check(loc(2),2) && formant_range_check(loc(3),3))
@@ -112,9 +112,9 @@ if nargout == 0
     axis xy; axis tight; colormap(jet); view(0,90);
     hold on
     z = repmat(64,1,size(formant_contour, 1));
-    plot3(formant_contour(:,1),1:size(formant_contour, 1),z,'ro','LineWidth',3)
-    plot3(formant_contour(:,2),1:size(formant_contour, 1),z,'yo','LineWidth',3)
-    plot3(formant_contour(:,3),1:size(formant_contour, 1),z,'go','LineWidth',3)
+    plot3(formant_contour(:,1),1:size(formant_contour, 1),z,'go','LineWidth',3)
+    plot3(formant_contour(:,2),1:size(formant_contour, 1),z,'bo','LineWidth',3)
+    plot3(formant_contour(:,3),1:size(formant_contour, 1),z,'ro','LineWidth',3)
     legend('','1st Formant','2nd Formant','3rd Formant')       
     end
 else

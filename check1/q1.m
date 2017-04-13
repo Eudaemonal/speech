@@ -9,4 +9,4 @@ stft(sample,fs);view(0,90);
 
 figure
 
-formant_contour(sample,fs);
+formant_contour(sample,fs,256,0);
