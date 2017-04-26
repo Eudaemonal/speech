@@ -1,0 +1,25 @@
+function [ output_args ] = gammatone(fc, fs, L)
+%GAMMATONE Summary of this function goes here
+%   Detailed explanation goes here
+%{
+INPUTS:
+        fc  - centre frequency
+        fs  - sampling frequency
+        L   - filter length
+ONPUTS:
+        y   - finite length gammatone filter taps
+%}
+T = 1/fs;
+ERB = 24.7 + 0.108 * fc;
+
+p = zeros(L,1);
+for n=1:L
+   p(n) = 
+end
+
+
+
+
+
+end
+
