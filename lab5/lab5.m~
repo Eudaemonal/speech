@@ -1,5 +1,0 @@
-
-
-y = gammatone(400,8000,160);
-
-plot(abs(fft(y)))
